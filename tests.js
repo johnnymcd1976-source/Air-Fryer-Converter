@@ -90,6 +90,21 @@ test("GitHub Pages entry point uses only local application assets", () => {
   ["styles.css", "calculation.js", "app.js", "manifest.webmanifest", "assets/air-fryer.svg"].forEach((asset) => assert.match(html, new RegExp(asset.replace(".", "\\."))));
   assert.doesNotMatch(html, /https?:\/\//);
 });
+test("Home Screen icon references use local PNG files at the required sizes", () => {
+  const html = fs.readFileSync(path.join(__dirname, "index.html"), "utf8");
+  const manifest = JSON.parse(fs.readFileSync(path.join(__dirname, "manifest.webmanifest"), "utf8"));
+  const dimensions = (file) => {
+    const png = fs.readFileSync(path.join(__dirname, "assets", file));
+    assert.equal(png.subarray(1, 4).toString("ascii"), "PNG");
+    return [png.readUInt32BE(16), png.readUInt32BE(20)];
+  };
+  assert.match(html, /rel="apple-touch-icon" sizes="180x180" href="assets\/apple-touch-icon\.png"/);
+  assert.match(html, /apple-mobile-web-app-title" content="Air Fryer Converter"/);
+  assert.deepEqual(dimensions("apple-touch-icon.png"), [180, 180]);
+  assert.deepEqual(dimensions("icon-192.png"), [192, 192]);
+  assert.deepEqual(dimensions("icon-512.png"), [512, 512]);
+  assert.deepEqual(manifest.icons.slice(0, 2).map((icon) => [icon.src, icon.sizes]), [["assets/icon-192.png", "192x192"], ["assets/icon-512.png", "512x512"]]);
+});
 test("the UI wires immediate updates, local theme persistence and stable unit state", () => {
   const source = fs.readFileSync(path.join(__dirname, "app.js"), "utf8");
   assert.match(source, /localStorage\.getItem\("airFryerTheme"\)/);
