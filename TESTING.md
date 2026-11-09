@@ -1,37 +1,32 @@
 # Testing record
 
-## Executed checks
+## Automated checks run
 
-`node tests.js` covers fourteen deterministic checks:
+`node tests.js` was run successfully on the release candidate. It contains 26 deterministic checks covering:
 
-1. Approved conventional 200°C / 30-minute example → 160°C / 24 minutes / 18-minute check.
-2. Fan conversion temperature adjustment.
-3. Gas Mark 4 lookup conversion.
-4. Half Gas Mark support.
-5. Unsupported Gas Mark rejection.
-6. Time rounding.
-7. Very short duration early-check floor.
-8. Missing/invalid temperature and zero time validation.
-9. Unusually high temperatures: warning without hidden clamping.
-10. Nearest Gas Mark helper used on a unit switch.
-11. The reported Gas Mark 4 / 10-minute scenario → 140°C / 8 minutes / a 6-minute check, confirming those inputs cannot validly show 160°C / 24 minutes.
-12. All seven food categories are present and each has three non-empty contextual tips.
-13. The GitHub Pages entry point uses only local assets; no backend or external application dependency is referenced.
-14. Theme preference persistence and immediate input/category update listeners are wired into the app.
+- Approved conventional and fan examples, including 175°C fan → 160°C and 220°C conventional / 40 minutes → 180°C / 32 minutes.
+- 10°C suggested-temperature rounding, with exact halves rounded upward.
+- Whole-number Celsius acceptance and fractional, empty, zero, negative and out-of-range Celsius rejection.
+- UK whole and half Gas Mark lookups, invalid Gas Mark rejection and recognised half-mark button stepping.
+- Celsius → Gas Mark → Celsius restoration, repeated unit changes without drift, and intentional Gas Mark edits becoming the new Celsius source.
+- Whole-minute time rounding, short-duration handling, early-check calculation and time boundaries.
+- Out-of-usual-range air-fry warnings without hidden clamping.
+- All seven food-tip categories, the chicken-specific 75°C guidance, compact general safety text, local GitHub Pages asset paths, theme preference storage and immediate-update wiring.
 
-## Manual browser review checklist
+Syntax checking also passed for `calculation.js` and `app.js`.
 
-Before release, open `index.html` in a current desktop and mobile browser and check:
+## Layout and accessibility review
 
-- Tab through segmented controls, steppers, select and theme button; focus rings must remain visible.
-- Change every input and confirm the result updates without a Convert button.
-- Switch Celsius ↔ Gas Mark and conventional ↔ fan mode; the expected Gas Mark 4 / 10-minute conventional result is 140°C / 8 minutes.
-- Test an unsupported Gas Mark and an empty input.
-- Check every food category, both colour themes and a narrow mobile viewport.
-- Confirm the local theme choice survives a page reload.
+The CSS has a dedicated narrow-screen layout for widths below 620px. It reduces spacing and padding while retaining 44px-or-larger touch controls, two-column result cards, safe-area padding, focus styles, reduced-motion support and no fixed-width content that could force horizontal scrolling from 320px upward.
+
+The source was reviewed for semantic labels, keyboard-operable buttons and select controls, visible focus indicators, validation status text and local theme persistence.
+
+## Remaining release checks
+
+No device simulator or headless browser is available in this workspace, so physical-device visual checks at 320px, 360px, 375px, 390px, 430px, tablet and desktop widths remain for final publisher approval. Use the supplied release candidate ZIP or local project folder to make those checks before publishing.
 
 ## Known limits
 
-- The 20°C/40°C and 80% rules are intentionally general estimates, not a scientific prediction for every food or appliance.
-- Gas Mark charts vary slightly by publisher and oven calibration; this tool uses a documented lookup and flags unsupported values rather than pretending the scale is linear.
-- A browser accessibility audit and physical-device test should be completed by the publisher before public launch.
+- The 20°C/40°C and 80% rules are general planning estimates, not appliance-specific cooking instructions.
+- Gas Mark charts vary slightly by publisher and oven calibration. The app uses a non-linear lookup and does not pretend unsupported values are valid.
+- Suggested temperatures outside 80°C–240°C are shown with a warning, not silently changed.
