@@ -8,7 +8,8 @@ Open `index.html` in a modern browser. Enter an oven temperature and cooking tim
 
 - Conventional and fan oven modes.
 - Celsius and common UK whole/half Gas Mark inputs.
-- Editable numeric fields plus large increment/decrement controls.
+- Whole-number Celsius input (50°C–300°C), plus large increment/decrement controls that move by 10°C.
+- Common UK whole/half Gas Mark input with a non-linear lookup and recognised-mark stepping.
 - Seven food-tip categories that change guidance only, never the conversion formula.
 - A remembered light/dark setting (device preference is used initially).
 - A visible food-safety reminder.
@@ -18,8 +19,9 @@ Open `index.html` in a modern browser. Enter an oven temperature and cooking tim
 - Conventional: input temperature − 40°C.
 - Fan oven: input temperature − 20°C.
 - Time: input time × 0.8.
-- Temperature and time are rounded to the nearest whole degree/minute; the early check reminder is 75% of the rounded time, again rounded to the nearest minute.
+- Suggested air-fryer temperatures are rounded to the nearest 10°C (exact halves round upward); time and the 75% early-check reminder are rounded to whole minutes.
 - Gas Mark is translated by lookup, rather than treated as a linear scale. Inputs outside the supported common marks (½–9 in half-mark increments) show a clear message.
+- Switching Celsius to Gas Mark temporarily displays the nearest recognised Gas Mark while retaining the original Celsius value. Switching back without changing the Gas Mark restores that exact Celsius entry.
 
 These are planning estimates, not guaranteed cooking instructions. Air fryers differ by capacity, airflow and load. Follow the food packaging and appliance guidance, and check food is safely cooked before serving.
 
@@ -37,7 +39,7 @@ With Node.js installed, run:
 node tests.js
 ```
 
-This runs calculation and validation boundary tests with no dependencies.
+This runs 25 calculation, validation, Gas Mark stability, food-category and static-deployment checks with no dependencies. See `TESTING.md` for the executed checks and remaining physical-device review.
 
 ## GitHub Pages deployment
 
@@ -46,4 +48,4 @@ This runs calculation and validation boundary tests with no dependencies.
 3. Under **Build and deployment**, select **Deploy from a branch**, then choose `main` and `/(root)`.
 4. Save. GitHub will provide the public site address after deployment completes.
 
-All paths are relative, so the app works whether Pages is deployed at a user site or project site. Do not publish until you have reviewed the files and chosen a licence. For a broadly reusable public project, consider MIT; obtain advice if you need a different licence or have third-party material to include.
+All paths are relative, so the app works whether Pages is deployed at a user site or project site. For this project, keep the existing source setting: `main` branch and `/(root)`. Do not publish until you have reviewed the release candidate and chosen a licence. For a broadly reusable public project, consider MIT; obtain advice if you need a different licence or have third-party material to include.
