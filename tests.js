@@ -1,0 +1,21 @@
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
+const { convert, gasToCelsius, celsiusToNearestGas, FOOD_TIPS } = require("./calculation.js");
+let checks = 0;
+function test(name, fn) { fn(); checks++; console.log(`✓ ${name}`); }
+test("conventional 200°C / 30 min", () => assert.deepEqual(convert({ ovenType:"conventional",unit:"celsius",temperature:200,minutes:30 }), { celsius:200,airFryerTemperature:160,airFryerMinutes:24,checkAfter:18,caution:"" }));
+test("fan 200°C / 30 min", () => assert.equal(convert({ ovenType:"fan",unit:"celsius",temperature:200,minutes:30 }).airFryerTemperature, 180));
+test("gas mark 4 maps through lookup", () => { const result = convert({ ovenType:"conventional",unit:"gas",temperature:4,minutes:30 }); assert.equal(gasToCelsius(4),180); assert.equal(result.airFryerTemperature,140); });
+test("Gas Mark 4 and 10 minutes never retain old results", () => { const result = convert({ ovenType:"conventional",unit:"gas",temperature:4,minutes:10 }); assert.equal(result.airFryerTemperature,140); assert.equal(result.airFryerMinutes,8); assert.equal(result.checkAfter,6); });
+test("half gas mark is supported", () => assert.equal(gasToCelsius(2.5),157.5));
+test("unsupported gas value is rejected", () => assert.match(convert({ ovenType:"fan",unit:"gas",temperature:2.25,minutes:20 }).error,/not supported/));
+test("time is rounded to nearest minute", () => assert.equal(convert({ ovenType:"fan",unit:"celsius",temperature:180,minutes:19.5 }).airFryerMinutes,16));
+test("short time has an early check of at least one minute", () => assert.equal(convert({ ovenType:"fan",unit:"celsius",temperature:180,minutes:0.6 }).checkAfter,1));
+test("empty and invalid values are rejected", () => { assert.match(convert({ ovenType:"fan",unit:"celsius",temperature:"",minutes:10 }).error,/temperature/); assert.match(convert({ ovenType:"fan",unit:"celsius",temperature:180,minutes:0 }).error,/time/); });
+test("unusual temperatures warn without clamping", () => { const result=convert({ ovenType:"fan",unit:"celsius",temperature:300,minutes:20 }); assert.equal(result.airFryerTemperature,280); assert.match(result.caution,/unusual/); });
+test("unit switch helper finds nearest available gas mark", () => assert.deepEqual(celsiusToNearestGas(180),{mark:4,celsius:180}));
+test("all seven food categories have concise, non-empty tips", () => { assert.deepEqual(Object.keys(FOOD_TIPS), ["chips","chicken","fish","vegetables","frozen","baking","other"]); Object.values(FOOD_TIPS).forEach((food) => { assert.ok(food.name); assert.equal(food.tips.length, 3); food.tips.forEach((tip) => assert.ok(tip.length > 8)); }); });
+test("GitHub Pages entry point has only local application assets", () => { const html = fs.readFileSync(path.join(__dirname,"index.html"),"utf8"); ["styles.css","calculation.js","app.js","manifest.webmanifest","assets/air-fryer.svg"].forEach((asset) => assert.match(html,new RegExp(asset.replace(".","\\.")))); assert.doesNotMatch(html,/https?:\/\//); });
+test("theme preference and immediate input handlers are wired", () => { const source = fs.readFileSync(path.join(__dirname,"app.js"),"utf8"); assert.match(source,/localStorage\.getItem\("airFryerTheme"\)/); assert.match(source,/localStorage\.setItem\("airFryerTheme"/); assert.match(source,/addEventListener\("input", updateResults\)/); assert.match(source,/addEventListener\("change", renderTips\)/); });
+console.log(`\n${checks} calculation checks passed.`);
