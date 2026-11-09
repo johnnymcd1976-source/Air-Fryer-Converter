@@ -2,7 +2,7 @@
 
 ## Automated checks run
 
-`node tests.js` was run successfully on the release candidate. It contains 26 deterministic checks covering:
+`node tests.js` was run successfully on the release candidate. It contains 27 deterministic checks covering:
 
 - Approved conventional and fan examples, including 175°C fan → 160°C and 220°C conventional / 40 minutes → 180°C / 32 minutes.
 - 10°C suggested-temperature rounding, with exact halves rounded upward.
@@ -11,7 +11,7 @@
 - Celsius → Gas Mark → Celsius restoration, repeated unit changes without drift, and intentional Gas Mark edits becoming the new Celsius source.
 - Whole-minute time rounding, short-duration handling, early-check calculation and time boundaries.
 - Out-of-usual-range air-fry warnings without hidden clamping.
-- All seven food-tip categories, the chicken-specific 75°C guidance, compact general safety text, local GitHub Pages asset paths, theme preference storage and immediate-update wiring.
+- All seven food-tip categories, the chicken-specific 75°C guidance, compact general safety text, local GitHub Pages asset paths, Apple Home Screen/Android icon references and dimensions, theme preference storage and immediate-update wiring.
 
 Syntax checking also passed for `calculation.js` and `app.js`.
 
