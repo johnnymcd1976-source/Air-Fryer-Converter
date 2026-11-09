@@ -6,5 +6,9 @@
   "display": "standalone",
   "background_color": "#161b1c",
   "theme_color": "#12a594",
-  "icons": [{ "src": "assets/air-fryer.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/air-fryer.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
 }
