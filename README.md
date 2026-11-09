@@ -12,6 +12,7 @@ Open `index.html` in a modern browser. Enter an oven temperature and cooking tim
 - Common UK whole/half Gas Mark input with a non-linear lookup and recognised-mark stepping.
 - Seven food-tip categories that change guidance only, never the conversion formula.
 - A remembered light/dark setting (device preference is used initially).
+- A 180px Apple Home Screen icon plus 192px and 512px Android/web-app icons, all served from local relative paths.
 - A visible food-safety reminder.
 
 ## Calculation rules
